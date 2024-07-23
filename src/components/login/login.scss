@@ -1,0 +1,32 @@
+.login-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgba(79, 170, 132, 0.3);
+  backdrop-filter: blur(6px);
+  padding: 40px;
+  max-width: 400px;
+  width: 100%;
+  gap: 10px;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  .login-header {
+    font-size: 2rem;
+    color: #fff;
+  }
+
+  label {
+    font-size: 1rem;
+    color: #fff;
+    font-size: 18px;
+    align-self: flex-start;
+  }
+
+  .login-input {
+    font-size: 1rem;
+    max-width: 100%;
+    width: 90%;
+  }
+}

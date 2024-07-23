@@ -1,0 +1,78 @@
+:root {
+    --primary-color: #4faa84;
+    --secondary-color: #3c7168;
+    --text-color: #faf9fa;
+    --mid-color: #d3ede8;
+    --max-width: 1310px;
+    --max-btn: 120px;
+}
+
+body {
+    font-family: "Poppins", "Arial";
+    margin: 0px;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+label,
+span {
+    margin: 0;
+}
+
+.btn {
+    background: var(--secondary-color);
+    color: var(--text-color);
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    transition: 0.3s ease all;
+}
+
+.home-btn {
+    max-width: 160px;
+    width: 100%;
+    max-height: 50px;
+    height: 100%;
+    background: var(--mid-color);
+    font-size: 24px;
+    color: var(--secondary-color);
+    align-items: center;
+    display: flex;
+    transition: 0.3s ease all;
+    padding: 20px 10px;
+    justify-content: center;
+}
+
+.home-btn:hover {
+    background: var(--secondary-color);
+    color: var(--mid-color);
+}
+
+.btn:hover {
+    background: var(--primary-color);
+    color: var(--mid-color);
+}
+
+input {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1px solid var(--primary-color);
+    transition: 0.2s ease all;
+}
+
+input:focus {
+    outline: var(--primary-color);
+    box-shadow: 3px 4px 10px 2px #3c7168;
+}
+
+.error{
+    color: red;
+}
