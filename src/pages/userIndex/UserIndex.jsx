@@ -2,17 +2,18 @@ import React, { useState } from "react";
 import Navbar from "../../components/navbar/Navbar";
 import QuizCard from "../../components/quizcard/QuizCard";
 import "./userindex.scss";
+import { useParams } from "react-router-dom";
 
 function UserIndex() {
   const [level, setLevel] = useState("");
+  const userName = useParams();
 
   const levels = ["Easy", "Moderate", "Hard"];
-
   return (
     <>
       <Navbar />
       {level ? (
-        <QuizCard level={level} />
+        <QuizCard level={level} username={userName.username} />
       ) : (
         <div className="quiz-card-container">
           <h2>Select your level</h2>

@@ -1,78 +1,118 @@
-.quiz-card {
-    display: flex;
-    flex-direction: column;
-    margin: auto;
-    padding: 20px;
-    align-items: center;
-    height: 100%;
-    max-height: 100dvh;
-    justify-content: center;
+.quiz-page {
+    position: relative;
+    background: red;
+    overflow: hidden;
 
-    .quiz-card-content {
-        gap: 20px;
+    .quiz-score {
+        width: 50%;
+        justify-content: center;
+        padding: 10px;
+        justify-content: center;
         display: flex;
         flex-direction: column;
-        border-radius: 12px;
-        max-width: var(--card-max-width);
-        width: 100%;
-        max-height: var(--card-max-height);
-        height: 100%;
-        padding: 20px;
+        align-items: center;
         background: var(--primary-color);
+        overflow: hidden;
 
-        .q-no-container {
-            display: flex;
-            justify-content: flex-end;
+        .username {
+            text-transform: capitalize;
         }
 
-        .q-no {
-            color: var(--secondary-color);
-            font-size: 16px;
+    }
+
+    .leader-board {
+        // position: absolute;
+        // right: -100%;
+        transition: 0.2s ease all;
+        top: 0;
+        width: 100%;
+        max-width: 400px;
+        height: 400px;
+        background: var(--mid-color);
+
+        & .show {
+            right: 0;
         }
+    }
 
-        .current-q-no {
-            color: var(--mid-color);
-            font-size: 32px;
-        }
 
-        .btn-container {
-            display: flex;
-            justify-content:flex-end;
+    .quiz-card {
+        display: flex;
+        flex-direction: column;
+        margin: auto;
+        padding: 20px;
+        align-items: center;
+        height: 100%;
+        max-height: 100dvh;
+        justify-content: center;
 
-            & button {
-                padding: 10px 20px;
-                border-radius: 12px;
-                border: none;
 
-                &:hover {
-                    cursor: pointer;
-                    background: var(--secondary-color);
-                }
-            }
-
-        }
-
-        .questions {
-            color: var(--text-color);
+        .quiz-card-content {
+            gap: 20px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            border-radius: 12px;
+            max-width: var(--card-max-width);
+            width: 100%;
+            max-height: var(--card-max-height);
+            height: 100%;
+            padding: 20px;
+            background: var(--primary-color);
 
-            & ul {
-                list-style: none;
-                padding: 0px;
-                gap: 10px;
+            .q-no-container {
+                display: flex;
+                justify-content: flex-end;
+            }
+
+            .q-no {
+                color: var(--secondary-color);
+                font-size: 16px;
+            }
+
+            .current-q-no {
+                color: var(--mid-color);
+                font-size: 32px;
+            }
+
+            .btn-container {
+                display: flex;
+                justify-content: flex-end;
+
+                & button {
+                    padding: 10px 20px;
+                    border-radius: 12px;
+                    border: none;
+
+                    &:hover {
+                        cursor: pointer;
+                        background: var(--secondary-color);
+                    }
+                }
+
+            }
+
+            .questions {
+                color: var(--text-color);
                 display: flex;
                 flex-direction: column;
+                gap: 10px;
 
-                & li{
-                    padding: 10px;
-                    border-radius: 12px;
-                    border: 1px solid var(--mid-color);
+                & ul {
+                    list-style: none;
+                    padding: 0px;
+                    gap: 10px;
+                    display: flex;
+                    flex-direction: column;
 
-                    &:hover{
-                        cursor: url(../../assets/target-curser.svg), auto;
-                        background: var(--secondary-color);
+                    & li {
+                        padding: 10px;
+                        border-radius: 12px;
+                        border: 1px solid var(--mid-color);
+
+                        &:hover {
+                            cursor: url(../../assets/target-curser.svg), auto;
+                            background: var(--secondary-color);
+                        }
                     }
                 }
             }
