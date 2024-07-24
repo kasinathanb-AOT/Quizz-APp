@@ -1,0 +1,39 @@
+.quiz-card-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+    align-items: center;
+    gap: 20px;
+    color: #000;
+    h2 {
+        font-weight: 600;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .quiz-card {
+        padding: 20px;
+        border-radius: 8px;
+        min-width: 200px;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+        background-color: var(--secondary-color);
+        color: white;
+        transition: 0.2s ease all;
+
+        &:hover {
+            transform: scale(0.9);
+            cursor: url(../../assets/target-curser.svg), auto;
+            background-color: var(--primary-color);
+        }
+    }
+}

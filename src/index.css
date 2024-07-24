@@ -5,6 +5,9 @@
     --mid-color: #d3ede8;
     --max-width: 1310px;
     --max-btn: 120px;
+    --card-max-width:600px;
+    --card-max-height:500px;
+    --custom-cursor:"../../assets/target-curser.svg";
 }
 
 body {
@@ -20,6 +23,7 @@ h4,
 h5,
 h6,
 label,
+ul,li,
 span {
     margin: 0;
 }

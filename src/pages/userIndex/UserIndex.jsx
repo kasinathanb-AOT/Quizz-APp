@@ -1,19 +1,38 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState } from "react";
+import Navbar from "../../components/navbar/Navbar";
+import QuizCard from "../../components/quizcard/QuizCard";
+import "./userindex.scss";
 
 function UserIndex() {
-const navigate = useNavigate();
-  const handleLogout =()=>{
-    localStorage.removeItem("userData")
-    navigate('/');
-  }
+  const [level, setLevel] = useState("");
+
+  const levels = ["Easy", "Moderate", "Hard"];
+
   return (
-    <div>UserIndex
-      <button onClick={()=>handleLogout()}>
-        Log out
-      </button>
-    </div>
-  )
+    <>
+      <Navbar />
+      {level ? (
+        <QuizCard level={level} />
+      ) : (
+        <div className="quiz-card-container">
+          <h2>Select your level</h2>
+          <ul>
+            {levels.map((item, index) => {
+              return (
+                <li
+                  className={`quiz-card ${item.toLowerCase()}`}
+                  key={index}
+                  onClick={() => setLevel(item)}
+                >
+                  {item}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
+    </>
+  );
 }
 
-export default UserIndex
+export default UserIndex;
