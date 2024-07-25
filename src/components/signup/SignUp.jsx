@@ -12,11 +12,9 @@ function SignUp() {
 
   const [error, setError] = useState("");
 
-  // Fetch userData from local storage and ensure it's an array
   const fetchUserData = () => {
     try {
       const storedUserData = localStorage.getItem("userData");
-      // Ensure that storedUserData is a valid array
       return Array.isArray(JSON.parse(storedUserData)) ? JSON.parse(storedUserData) : [];
     } catch (e) {
       console.error("Error parsing userData from local storage:", e);
@@ -37,20 +35,17 @@ function SignUp() {
   const handleSignUp = () => {
     const { username, email, password } = formData;
 
-    // Validation check
     if (!username || !email || !password) {
       setError("Please fill all the fields");
-      return; // Exit early if validation fails
+      return; 
     }
 
-    // Check if the username already exists
     const usernameExists = userData.some((user) => user.username === username);
     if (usernameExists) {
       setError("Username already exists");
-      return; // Exit early if username already exists
+      return; 
     }
 
-    // Clear error and add new user
     setError("");
     const newUser = [...userData, { username, email, password }];
     localStorage.setItem("userData", JSON.stringify(newUser));

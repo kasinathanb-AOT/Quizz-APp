@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 function UserIndex() {
   const [level, setLevel] = useState("");
   const userName = useParams();
+
   const leaderBoard = (
     JSON.parse(localStorage.getItem("leaderBoard")) || []
   ).sort((a, b) => {
@@ -18,17 +19,17 @@ function UserIndex() {
   };
 
   const leaderBoardFn = (score) => {
-    const newLeaderBoard = [...leaderBoard];
-    const userIndex = newLeaderBoard.findIndex(
+    const userIndex = leaderBoard.findIndex(
       (item) => item.name === userName.username
     );
     if (userIndex !== -1) {
-      newLeaderBoard[userIndex].score = score;
+      if (score > leaderBoard[userIndex].score) {
+        leaderBoard[userIndex].score = score;
+      }
     } else {
-      newLeaderBoard.push({ name: userName.username, score: score });
+      leaderBoard.push({ name: userName.username, score: score });
     }
-    console.log(newLeaderBoard);
-    localStorage.setItem("leaderBoard", JSON.stringify(newLeaderBoard));
+    localStorage.setItem("leaderBoard", JSON.stringify(leaderBoard));
   };
 
   return (

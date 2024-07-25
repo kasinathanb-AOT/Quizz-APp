@@ -2,7 +2,7 @@ export const quiz = {
   topic: "Javascript",
   levels: {
     easy: {
-      totalQuestions: 3,
+      totalQuestions: 15,
       perQuestionScore: 5,
       questions: [
         {

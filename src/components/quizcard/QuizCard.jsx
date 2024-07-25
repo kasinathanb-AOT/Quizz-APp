@@ -24,6 +24,10 @@ function QuizCard({ level, username, backHome, leaderBoard }) {
     setTimeout(handleNext, 1000);
   };
 
+  {
+    isQuizComplete ? leaderBoard(score) : "";
+  }
+
   const handleNext = () => {
     if (currentIndex < quizData.totalQuestions - 1) {
       setCurrentIndex((prevIndex) => prevIndex + 1);
@@ -31,7 +35,6 @@ function QuizCard({ level, username, backHome, leaderBoard }) {
       setSelectedAnswer(userAnswers[currentIndex + 1]?.chosenAnswer || "");
     } else {
       setIsQuizComplete(true);
-      leaderBoard(score);
     }
   };
 
@@ -43,7 +46,6 @@ function QuizCard({ level, username, backHome, leaderBoard }) {
             <h2 className="username">Hi {username}</h2>
             <h2>Quiz Completed</h2>
             <p>Your Score: {score}</p>
-            <p>Correct Score: {score}</p>
             <p>Wrong Score: {userAnswers.length * defaultScore - score}</p>
             <button className="back-btn" onClick={backHome}>
               Back Home
