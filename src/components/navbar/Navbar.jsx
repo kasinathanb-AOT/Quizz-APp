@@ -6,7 +6,6 @@ import "./navbar.scss"
 function Navbar() {
   const navigate = useNavigate();
   const handleLogout = () => {
-    localStorage.removeItem("userData");
     navigate("/");
   };
 

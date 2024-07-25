@@ -1,40 +1,65 @@
 .quiz-page {
-    position: relative;
-    background: red;
-    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 64px;
+    overflow-x: hidden;
+    gap: 64px;
 
     .quiz-score {
-        width: 50%;
-        justify-content: center;
-        padding: 10px;
-        justify-content: center;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        background: var(--primary-color);
-        overflow: hidden;
-
-        .username {
-            text-transform: capitalize;
-        }
-
-    }
-
-    .leader-board {
-        // position: absolute;
-        // right: -100%;
-        transition: 0.2s ease all;
-        top: 0;
+        position: relative;
         width: 100%;
         max-width: 400px;
         height: 400px;
-        background: var(--mid-color);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        background: var(--primary-color);
+        padding: 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        color: var(--text-color);
+        text-align: center;
 
-        & .show {
-            right: 0;
+        .username {
+            text-transform: capitalize;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 22px;
+            margin: 10px 0;
+        }
+
+        p {
+            font-size: 18px;
+            margin: 5px 0;
+        }
+
+        .back-btn {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            border-radius: 12px 12px 0 0;
+            border: none;
+            font-size: 16px;
+            font-weight: 400;
+            background: var(--secondary-color);
+            color: var(--text-color);
+            transition: background 0.3s ease, color 0.3s ease;
+
+            &:hover {
+                background: var(--mid-color);
+                cursor: pointer;
+                color: var(--primary-color);
+            }
         }
     }
-
 
     .quiz-card {
         display: flex;
@@ -45,7 +70,6 @@
         height: 100%;
         max-height: 100dvh;
         justify-content: center;
-
 
         .quiz-card-content {
             gap: 20px;
@@ -88,7 +112,6 @@
                         background: var(--secondary-color);
                     }
                 }
-
             }
 
             .questions {

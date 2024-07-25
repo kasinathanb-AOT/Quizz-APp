@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./singup.scss";
+import "./signup.scss"; // Fixed typo: "singup" to "signup"
 import { useNavigate } from "react-router-dom";
 
 function SignUp() {
@@ -7,28 +7,54 @@ function SignUp() {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
-    password: ""
+    password: "",
   });
 
   const [error, setError] = useState("");
+
+  // Fetch userData from local storage and ensure it's an array
+  const fetchUserData = () => {
+    try {
+      const storedUserData = localStorage.getItem("userData");
+      // Ensure that storedUserData is a valid array
+      return Array.isArray(JSON.parse(storedUserData)) ? JSON.parse(storedUserData) : [];
+    } catch (e) {
+      console.error("Error parsing userData from local storage:", e);
+      return [];
+    }
+  };
+
+  const userData = fetchUserData();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value
+      [name]: value,
     });
   };
 
   const handleSignUp = () => {
     const { username, email, password } = formData;
+
+    // Validation check
     if (!username || !email || !password) {
       setError("Please fill all the fields");
-    } else {
-      setError("");
-      localStorage.setItem("userData", JSON.stringify(formData));
-      navigate(`/index/${formData.username}`);
+      return; // Exit early if validation fails
     }
+
+    // Check if the username already exists
+    const usernameExists = userData.some((user) => user.username === username);
+    if (usernameExists) {
+      setError("Username already exists");
+      return; // Exit early if username already exists
+    }
+
+    // Clear error and add new user
+    setError("");
+    const newUser = [...userData, { username, email, password }];
+    localStorage.setItem("userData", JSON.stringify(newUser));
+    navigate(`/index/${username}`);
   };
 
   return (

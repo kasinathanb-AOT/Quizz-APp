@@ -4,7 +4,7 @@
     align-items: center;
     padding: 20px;
     background: var(--primary-color);
-    
+
     .logo-container {
         display: flex;
         align-items: center;
@@ -16,11 +16,11 @@
         }
     }
 
-    .btn-container{
+    .btn-container {
         display: flex;
         gap: 10px;
 
-        .logout:hover{
+        .logout:hover {
             background: red;
         }
     }

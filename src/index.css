@@ -23,7 +23,8 @@ h4,
 h5,
 h6,
 label,
-ul,li,
+ul,
+li,
 span {
     margin: 0;
 }
@@ -78,5 +79,10 @@ input:focus {
 }
 
 .error{
+    text-align: center;
     color: red;
+}
+
+.leader-error{
+    font-size: 24px;
 }

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { quiz } from "../../utils/dataSet";
 import "./quizcard.scss";
 
-function QuizCard({ level, username }) {
+function QuizCard({ level, username, backHome, leaderBoard }) {
   const formattedLevel = level.toLowerCase();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState([]);
@@ -31,12 +31,13 @@ function QuizCard({ level, username }) {
       setSelectedAnswer(userAnswers[currentIndex + 1]?.chosenAnswer || "");
     } else {
       setIsQuizComplete(true);
+      leaderBoard(score);
     }
   };
 
   return (
     <div className="quiz-page">
-      {!isQuizComplete ? (
+      {isQuizComplete ? (
         <>
           <div className="quiz-score">
             <h2 className="username">Hi {username}</h2>
@@ -44,9 +45,9 @@ function QuizCard({ level, username }) {
             <p>Your Score: {score}</p>
             <p>Correct Score: {score}</p>
             <p>Wrong Score: {userAnswers.length * defaultScore - score}</p>
-          </div>
-          <div className={`leader-board ${!isQuizComplete ? "show" : ""}`}>
-            <h2>Leader Board</h2>
+            <button className="back-btn" onClick={backHome}>
+              Back Home
+            </button>
           </div>
         </>
       ) : (
