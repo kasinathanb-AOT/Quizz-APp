@@ -6,7 +6,9 @@ import { useParams } from "react-router-dom";
 
 function UserIndex() {
   const [level, setLevel] = useState("");
-  const userName = useParams();
+  const userNamePara = useParams();
+  const userName = userNamePara.username;
+  const [boardStatus, setBoardStatus] = useState(false);
 
   const leaderBoard = (
     JSON.parse(localStorage.getItem("leaderBoard")) || []
@@ -19,26 +21,27 @@ function UserIndex() {
   };
 
   const leaderBoardFn = (score) => {
-    const userIndex = leaderBoard.findIndex(
-      (item) => item.name === userName.username
-    );
+    const userIndex = leaderBoard.findIndex((item) => item.name === userName);
     if (userIndex !== -1) {
       if (score > leaderBoard[userIndex].score) {
         leaderBoard[userIndex].score = score;
       }
     } else {
-      leaderBoard.push({ name: userName.username, score: score });
+      leaderBoard.push({ name: userName, score: score });
     }
     localStorage.setItem("leaderBoard", JSON.stringify(leaderBoard));
   };
 
+  const toggleLeaderBoard = () => {
+    setBoardStatus(!boardStatus);
+  };
   return (
-    <>
+    <div className="main">
       <Navbar />
       {level ? (
         <QuizCard
           level={level}
-          username={userName.username}
+          username={userName}
           backHome={backHome}
           leaderBoard={leaderBoardFn}
         />
@@ -60,38 +63,57 @@ function UserIndex() {
               })}
             </ul>
           </div>
-          <div className="leader-board">
-            <div className="heading">
-              <h1>Leader Board</h1>
-            </div>
-            <div className="content">
-              {leaderBoard.length > 0 ? (
-                <ul>
-                  {leaderBoard.map((item, index) => {
-                    return (
-                      <li key={index}>
-                        <span className="first">
-                          <span>
-                            #<span className="rank">{index + 1}</span>
+          {boardStatus ? (
+            <div className={`leader-board ${boardStatus ? "show" : "hide"}`}>
+              <div className="heading">
+                <h1>Leader Board</h1>
+              </div>
+              <div className="content">
+                {leaderBoard.length > 0 ? (
+                  <ul>
+                    {leaderBoard.map((item, index) => {
+                      return (
+                        <li
+                          key={index}
+                          style={{
+                            background: userName === item.name ? "#d3ede8" : "",
+                            color: userName === item.name ? "#000" : "",
+                          }}
+                        >
+                          <span className="first">
+                            <span>
+                              #<span className="rank">{index + 1}</span>
+                            </span>
+                            <p className="leader-name">
+                              {userName === item.name ? "You" : item.name}
+                            </p>
                           </span>
-                          <p className="leader-name">{item.name}</p>
-                        </span>
-                        <p>
-                          {item.score}
-                          <span>pts</span>
-                        </p>
-                      </li>
-                    );
-                  })}
-                </ul>
-              ) : (
-                <p className="error leader-error">No data found</p>
-              )}
+                          <p>
+                            {item.score}
+                            <span>pts</span>
+                          </p>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                ) : (
+                  <p className="error leader-error">No data found</p>
+                )}
+              </div>
             </div>
-          </div>
+          ) : (
+            ""
+          )}
         </>
       )}
-    </>
+      {!level ? (
+        <button className="show-btn" onClick={() => toggleLeaderBoard()}>
+          Show Leader Board
+        </button>
+      ) : (
+        ""
+      )}
+    </div>
   );
 }
 

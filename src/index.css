@@ -86,3 +86,8 @@ input:focus {
 .leader-error{
     font-size: 24px;
 }
+
+
+::-webkit-scrollbar{
+    display: none;
+}
