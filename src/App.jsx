@@ -4,7 +4,7 @@ import UserIndex from './pages/userIndex/UserIndex';
 
 function App() {
   return (
-    <Router>
+    <Router basename='/Quizz-APp'>
       <Routes>
         <Route path='/' element={<Auth />} />
         <Route path='/index/:username' element={<UserIndex />} />
