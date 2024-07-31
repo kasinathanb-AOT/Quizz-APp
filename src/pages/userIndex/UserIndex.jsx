@@ -11,16 +11,15 @@ function UserIndex() {
   const userName = userNamePara.username;
   const [boardStatus, setBoardStatus] = useState(false);
   const [animationClass, setAnimationClass] = useState("hide");
-
-  const leaderBoard = (
+  const levels = ["Easy", "Moderate", "Hard"];
+  const [leaderBoardData, setLeaderBoardData] = useState(
     JSON.parse(localStorage.getItem("leaderBoard")) || []
-  ).sort((a, b) => {
-    return b.score - a.score;
-  });
+  );
 
-  const handleExit =()=>{
-    setLevel ("")
-  }
+  const handleExit = () => {
+    setLevel("");
+  };
+
   useEffect(() => {
     const handleBeforeUnload = (e) => {
       e.preventDefault();
@@ -37,21 +36,21 @@ function UserIndex() {
     };
   }, [level]);
 
-  const levels = ["Easy", "Moderate", "Hard"];
-  const backHome = () => {
-    setLevel("");
-  };
-
   const leaderBoardFn = (score) => {
-    const userIndex = leaderBoard.findIndex((item) => item.name === userName);
+    console.log("Function calling with score:", score);
+    const updatedLeaderBoard = [...leaderBoardData];
+    const userIndex = updatedLeaderBoard.findIndex(
+      (item) => item.name === userName
+    );
     if (userIndex !== -1) {
-      if (score > leaderBoard[userIndex].score) {
-        leaderBoard[userIndex].score = score;
+      if (score > updatedLeaderBoard[userIndex].score) {
+        updatedLeaderBoard[userIndex].score = score;
       }
     } else {
-      leaderBoard.push({ name: userName, score: score });
+      updatedLeaderBoard.push({ name: userName, score: score });
     }
-    localStorage.setItem("leaderBoard", JSON.stringify(leaderBoard));
+    setLeaderBoardData(updatedLeaderBoard);
+    localStorage.setItem("leaderBoard", JSON.stringify(updatedLeaderBoard));
   };
 
   const toggleLeaderBoard = () => {
@@ -66,14 +65,13 @@ function UserIndex() {
 
   return (
     <div className="main">
-      <Navbar />
+      <Navbar username={userName} />
       {level ? (
         <QuizCard
           level={level}
           username={userName}
-          backHome={backHome}
           leaderBoard={leaderBoardFn}
-          exit={()=>handleExit()}
+          exit={handleExit}
         />
       ) : (
         <>
@@ -93,7 +91,7 @@ function UserIndex() {
           </div>
           {boardStatus && (
             <LeaderBoard
-              leaderBoard={leaderBoard}
+              leaderBoard={leaderBoardData}
               userName={userName}
               animationClass={animationClass}
             />

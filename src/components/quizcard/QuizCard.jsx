@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { quiz } from "../../utils/dataSet";
 import "./quizcard.scss";
 
-function QuizCard({ level, username, backHome, leaderBoard, exit }) {
+function QuizCard({ level, username, leaderBoard, exit }) {
   const formattedLevel = level.toLowerCase();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState([]);
@@ -15,42 +15,41 @@ function QuizCard({ level, username, backHome, leaderBoard, exit }) {
   const [btnText, setBtnText] = useState("Exit");
 
   useEffect(() => {
-    if (currentIndex == 0) {
-      setBtnText("Exit");
-    } else {
-      setBtnText("Back");
-    }
+    setBtnText(currentIndex === 0 ? "Exit" : "Back");
   }, [currentIndex]);
 
+  useEffect(() => {
+    if (isQuizComplete) {
+      leaderBoard(score);
+      console.log("Passing final score to index:", score);
+    }
+  }, [isQuizComplete, score]);
 
   const handleAnswer = (choice) => {
     setSelectedAnswer(choice);
     setDisabled(true);
     const isCorrect = choice === quizData.questions[currentIndex].correctAnswer;
+    if (isCorrect) setScore((prevScore) => prevScore + defaultScore);
     const newUserAnswers = [...userAnswers];
     newUserAnswers[currentIndex] = { chosenAnswer: choice };
     setUserAnswers(newUserAnswers);
-    if (isCorrect) setScore((prevScore) => prevScore + defaultScore);
-  };
 
-  {
-    isQuizComplete ? leaderBoard(score) : "";
-  }
+    if (currentIndex === quizData.totalQuestions - 1) {
+      setIsQuizComplete(true);
+    } else {
+      setTimeout(handleNext, 1000);
+    }
+  };
 
   const handleExit = () => {
     exit();
   };
 
   const handleNext = () => {
-    if (currentIndex < quizData.totalQuestions - 1) {
-      setCurrentIndex((prevIndex) => prevIndex + 1);
-      setDisabled(false);
-      setSelectedAnswer(userAnswers[currentIndex + 1]?.chosenAnswer || "");
-    } else {
-      setIsQuizComplete(true);
-    }
+    setCurrentIndex((prevIndex) => prevIndex + 1);
+    setDisabled(false);
+    setSelectedAnswer(userAnswers[currentIndex + 1]?.chosenAnswer || "");
   };
-
 
   const handleBackOrExit = () => {
     if (currentIndex > 0) {
@@ -70,7 +69,7 @@ function QuizCard({ level, username, backHome, leaderBoard, exit }) {
             <h2>Quiz Completed</h2>
             <p>Your Score: {score}</p>
             <p>Wrong Score: {userAnswers.length * defaultScore - score}</p>
-            <button className="back-btn" onClick={() => handleBack()}>
+            <button className="back-btn" onClick={handleExit}>
               Back Home
             </button>
           </div>

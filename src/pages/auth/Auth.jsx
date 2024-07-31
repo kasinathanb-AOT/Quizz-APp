@@ -5,7 +5,7 @@ import "./auth.scss";
 import studyGirl from "../../assets/sturdy-girl.svg";
 
 function Auth() {
-  const [isLogin, setIsLogin] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
 
   const toggleForm = () => {
     setIsLogin(!isLogin);
@@ -15,7 +15,7 @@ function Auth() {
     <div className="auth-container">
       <div className="auth-left">
         <h1 className="auth-header">
-          {isLogin ? "Welcome Back" : "Create an account to continue"}
+          {isLogin ? "Don't have an account? " : "Already have an acocunt? "}
         </h1>
         <button className="btn home-btn" onClick={toggleForm}>
           {isLogin ? "Sign Up" : "Login"}
