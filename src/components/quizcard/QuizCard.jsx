@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { quiz } from "../../utils/dataSet";
 import "./quizcard.scss";
 
-function QuizCard({ level, username, backHome, leaderBoard }) {
+function QuizCard({ level, username, backHome, leaderBoard, exit }) {
   const formattedLevel = level.toLowerCase();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState([]);
@@ -12,6 +12,16 @@ function QuizCard({ level, username, backHome, leaderBoard }) {
   const [isQuizComplete, setIsQuizComplete] = useState(false);
   const quizData = quiz.levels[formattedLevel];
   const defaultScore = quizData.perQuestionScore;
+  const [btnText, setBtnText] = useState("Exit");
+
+  useEffect(() => {
+    if (currentIndex == 0) {
+      setBtnText("Exit");
+    } else {
+      setBtnText("Back");
+    }
+  }, [currentIndex]);
+
 
   const handleAnswer = (choice) => {
     setSelectedAnswer(choice);
@@ -21,12 +31,15 @@ function QuizCard({ level, username, backHome, leaderBoard }) {
     newUserAnswers[currentIndex] = { chosenAnswer: choice };
     setUserAnswers(newUserAnswers);
     if (isCorrect) setScore((prevScore) => prevScore + defaultScore);
-    setTimeout(handleNext, 1000);
   };
 
   {
     isQuizComplete ? leaderBoard(score) : "";
   }
+
+  const handleExit = () => {
+    exit();
+  };
 
   const handleNext = () => {
     if (currentIndex < quizData.totalQuestions - 1) {
@@ -35,6 +48,16 @@ function QuizCard({ level, username, backHome, leaderBoard }) {
       setSelectedAnswer(userAnswers[currentIndex + 1]?.chosenAnswer || "");
     } else {
       setIsQuizComplete(true);
+    }
+  };
+
+
+  const handleBackOrExit = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex((prevIndex) => prevIndex - 1);
+      setSelectedAnswer(userAnswers[currentIndex - 1]?.chosenAnswer || "");
+    } else {
+      handleExit();
     }
   };
 
@@ -47,7 +70,7 @@ function QuizCard({ level, username, backHome, leaderBoard }) {
             <h2>Quiz Completed</h2>
             <p>Your Score: {score}</p>
             <p>Wrong Score: {userAnswers.length * defaultScore - score}</p>
-            <button className="back-btn" onClick={backHome}>
+            <button className="back-btn" onClick={() => handleBack()}>
               Back Home
             </button>
           </div>
@@ -88,6 +111,7 @@ function QuizCard({ level, username, backHome, leaderBoard }) {
                 </ul>
               </div>
               <div className="btn-container">
+                <button onClick={handleBackOrExit}>{btnText}</button>
                 <button
                   onClick={handleNext}
                   disabled={currentIndex === quizData.totalQuestions - 1}

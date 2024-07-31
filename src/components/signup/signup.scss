@@ -12,6 +12,11 @@
     border-radius: 0.5rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
+    @media screen and (max-width:480px) {
+        padding: 20px;
+        max-width: 500px;
+    }
+
     .signup-header {
         font-size: 2rem;
         color: #fff;
@@ -27,8 +32,6 @@
     .signup-input {
         width: 90%;
         font-size: 1rem;
-
-        
     }
 
 

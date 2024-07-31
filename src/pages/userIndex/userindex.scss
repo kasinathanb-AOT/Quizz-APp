@@ -41,6 +41,7 @@
             display: flex;
             align-items: center;
             gap: 20px;
+            flex-wrap: wrap;
         }
 
         .quiz-card {
@@ -52,6 +53,7 @@
             align-items: center;
             background-color: var(--secondary-color);
             color: white;
+            flex-grow: 1;
             transition: 0.2s ease all;
 
             &:hover {
@@ -74,6 +76,10 @@
         max-height: 400px;
         overflow: auto;
         transition: all 0.2s ease-in-out;
+
+        @media screen and (max-width:768px) {
+            max-width: 90%;
+        }
 
         & .heading {
             color: var(--text-color);

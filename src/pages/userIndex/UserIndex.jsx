@@ -1,20 +1,42 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../../components/navbar/Navbar";
 import QuizCard from "../../components/quizcard/QuizCard";
 import "./userindex.scss";
 import { useParams } from "react-router-dom";
+import LeaderBoard from "../../components/leaderBoard/LeaderBoard";
 
 function UserIndex() {
   const [level, setLevel] = useState("");
   const userNamePara = useParams();
   const userName = userNamePara.username;
   const [boardStatus, setBoardStatus] = useState(false);
+  const [animationClass, setAnimationClass] = useState("hide");
 
   const leaderBoard = (
     JSON.parse(localStorage.getItem("leaderBoard")) || []
   ).sort((a, b) => {
     return b.score - a.score;
   });
+
+  const handleExit =()=>{
+    setLevel ("")
+  }
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      e.preventDefault();
+      e.returnValue =
+        "You have unsaved changes. Are you sure you want to leave?";
+    };
+
+    if (level) {
+      window.addEventListener("beforeunload", handleBeforeUnload);
+    }
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [level]);
+
   const levels = ["Easy", "Moderate", "Hard"];
   const backHome = () => {
     setLevel("");
@@ -33,8 +55,15 @@ function UserIndex() {
   };
 
   const toggleLeaderBoard = () => {
-    setBoardStatus(!boardStatus);
+    if (boardStatus) {
+      setAnimationClass("hide");
+      setTimeout(() => setBoardStatus(false), 200);
+    } else {
+      setBoardStatus(true);
+      setAnimationClass("show");
+    }
   };
+
   return (
     <div className="main">
       <Navbar />
@@ -44,74 +73,37 @@ function UserIndex() {
           username={userName}
           backHome={backHome}
           leaderBoard={leaderBoardFn}
+          exit={()=>handleExit()}
         />
       ) : (
         <>
           <div className="quiz-card-container">
             <h2>Select your level</h2>
             <ul>
-              {levels.map((item, index) => {
-                return (
-                  <li
-                    className={`quiz-card ${item.toLowerCase()}`}
-                    key={index}
-                    onClick={() => setLevel(item)}
-                  >
-                    {item}
-                  </li>
-                );
-              })}
+              {levels.map((item, index) => (
+                <li
+                  className={`quiz-card ${item.toLowerCase()}`}
+                  key={index}
+                  onClick={() => setLevel(item)}
+                >
+                  {item}
+                </li>
+              ))}
             </ul>
           </div>
-          {boardStatus ? (
-            <div className={`leader-board ${boardStatus ? "show" : "hide"}`}>
-              <div className="heading">
-                <h1>Leader Board</h1>
-              </div>
-              <div className="content">
-                {leaderBoard.length > 0 ? (
-                  <ul>
-                    {leaderBoard.map((item, index) => {
-                      return (
-                        <li
-                          key={index}
-                          style={{
-                            background: userName === item.name ? "#d3ede8" : "",
-                            color: userName === item.name ? "#000" : "",
-                          }}
-                        >
-                          <span className="first">
-                            <span>
-                              #<span className="rank">{index + 1}</span>
-                            </span>
-                            <p className="leader-name">
-                              {userName === item.name ? "You" : item.name}
-                            </p>
-                          </span>
-                          <p>
-                            {item.score}
-                            <span>pts</span>
-                          </p>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                ) : (
-                  <p className="error leader-error">No data found</p>
-                )}
-              </div>
-            </div>
-          ) : (
-            ""
+          {boardStatus && (
+            <LeaderBoard
+              leaderBoard={leaderBoard}
+              userName={userName}
+              animationClass={animationClass}
+            />
           )}
         </>
       )}
-      {!level ? (
-        <button className="show-btn" onClick={() => toggleLeaderBoard()}>
-          Show Leader Board
+      {!level && (
+        <button className="show-btn" onClick={toggleLeaderBoard}>
+          {boardStatus ? "Hide" : "Show"} Leader Board
         </button>
-      ) : (
-        ""
       )}
     </div>
   );
