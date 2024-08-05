@@ -1,20 +1,27 @@
 import React, { useState } from "react";
 import "./login.scss";
 import { useNavigate } from "react-router-dom";
+import { UserLogin } from "../../services/userServices";
 
 function Login() {
   const navigate = useNavigate();
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
-  const userData = JSON.parse(localStorage.getItem("userData")) || [];
-  const handleLogin = () => {
-    console.log(username, password);
-    userData.map((i) => {
-      i.username == username && i.password === password
-        ? navigate(`/index/${username}`)
-        : "";
-    });
+  const [error, setError] = useState("");
+  const handleLogin = async () => {
+    if (!username || !password) setError("Fill all the fields");
+
+    if (!username) setError("Username is required");
+
+    if (!password) setError("Password is missing");
+    else {
+      const response = await UserLogin(username, password);
+      if (response) {
+        navigate(`/index/${response}`);
+      }
+    }
   };
+
   return (
     <div className="login-form">
       <h1 className="login-header">Login</h1>

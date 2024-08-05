@@ -6,7 +6,8 @@ import "./navbar.scss"
 function Navbar({username}) {
   const navigate = useNavigate();
   const handleLogout = () => {
-    navigate("/");
+    localStorage.removeItem("authToken");
+    navigate("/")
   };
   
   return (

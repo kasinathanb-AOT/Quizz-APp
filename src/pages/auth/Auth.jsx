@@ -3,8 +3,10 @@ import Login from "../../components/login/Login";
 import SignUp from "../../components/signup/SignUp";
 import "./auth.scss";
 import studyGirl from "../../assets/sturdy-girl.svg";
+import useAuthRedirect from "../../hooks/redirectHook";
 
 function Auth() {
+  useAuthRedirect();
   const [isLogin, setIsLogin] = useState(true);
 
   const toggleForm = () => {

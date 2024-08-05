@@ -49,6 +49,7 @@ function SignUp() {
 
     const response = await UserSignup(formData);
     if (response.data.authToken) {
+      
       navigate(`/index/${response.data.authToken}`);
     } else {
       setErrors({ general: response.data });
