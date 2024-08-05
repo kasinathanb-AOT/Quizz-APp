@@ -1,5 +1,4 @@
 export const quiz = {
-  topic: "Javascript",
   levels: {
     easy: {
       totalQuestions: 15,

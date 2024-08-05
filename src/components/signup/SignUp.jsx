@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import "./signup.scss"; // Make sure the path is correct
+import "./signup.scss";
 import { useNavigate } from "react-router-dom";
+import { UserSignup } from "../../services/userServices";
+import { validateForm } from "../../utils/formValidations";
 
 function SignUp() {
   const navigate = useNavigate();
@@ -15,7 +17,9 @@ function SignUp() {
   const fetchUserData = () => {
     try {
       const storedUserData = localStorage.getItem("userData");
-      return Array.isArray(JSON.parse(storedUserData)) ? JSON.parse(storedUserData) : [];
+      return Array.isArray(JSON.parse(storedUserData))
+        ? JSON.parse(storedUserData)
+        : [];
     } catch (e) {
       console.error("Error parsing userData from local storage:", e);
       return [];
@@ -36,48 +40,19 @@ function SignUp() {
     });
   };
 
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const validateForm = () => {
-    const newErrors = {};
-
-    if (!formData.username) {
-      newErrors.username = "Username is required";
-    }
-
-    if (!formData.email) {
-      newErrors.email = "Email is required";
-    } else if (!validateEmail(formData.email)) {
-      newErrors.email = "Invalid email format";
-    }
-
-    if (!formData.password) {
-      newErrors.password = "Password is required";
-    } else if (formData.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
-    }
-
-    const usernameExists = userData.some((user) => user.username === formData.username);
-    if (usernameExists) {
-      newErrors.username = "Username already exists";
-    }
-
-    return newErrors;
-  };
-
-  const handleSignUp = () => {
-    const validationErrors = validateForm();
+  const handleSignUp = async () => {
+    const validationErrors = validateForm(formData, userData);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
 
-    const newUser = [...userData, formData];
-    localStorage.setItem("userData", JSON.stringify(newUser));
-    navigate(`/index/${formData.username}`);
+    const response = await UserSignup(formData);
+    if (response.data.authToken) {
+      navigate(`/index/${response.data.authToken}`);
+    } else {
+      setErrors({ general: response.data });
+    }
   };
 
   return (

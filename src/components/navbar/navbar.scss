@@ -12,13 +12,14 @@
         align-items: center;
         justify-content: center;
         gap: 10px;
+
         & img {
             max-width: 70px;
             height: auto;
         }
 
         & p {
-            color:  #fff;
+            color: #fff;
             font-size: 1.4rem;
             text-transform: capitalize;
         }

@@ -7,8 +7,6 @@ import LeaderBoard from "../../components/leaderBoard/LeaderBoard";
 
 function UserIndex() {
   const [level, setLevel] = useState("");
-  const userNamePara = useParams();
-  const userName = userNamePara.username;
   const [boardStatus, setBoardStatus] = useState(false);
   const [animationClass, setAnimationClass] = useState("hide");
   const levels = ["Easy", "Moderate", "Hard"];
@@ -65,7 +63,7 @@ function UserIndex() {
 
   return (
     <div className="main">
-      <Navbar username={userName} />
+      <Navbar />
       {level ? (
         <QuizCard
           level={level}

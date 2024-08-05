@@ -5,9 +5,9 @@
     --mid-color: #d3ede8;
     --max-width: 1310px;
     --max-btn: 120px;
-    --card-max-width:600px;
-    --card-max-height:500px;
-    --custom-cursor:"../../assets/target-curser.svg";
+    --card-max-width: 600px;
+    --card-max-height: 500px;
+    --custom-cursor: "../../assets/target-curser.svg";
 }
 
 body {
@@ -78,16 +78,16 @@ input:focus {
     box-shadow: 3px 4px 10px 2px #3c7168;
 }
 
-.error{
+.error {
     text-align: center;
     color: red;
 }
 
-.leader-error{
+.leader-error {
     font-size: 24px;
 }
 
 
-::-webkit-scrollbar{
+::-webkit-scrollbar {
     display: none;
 }
