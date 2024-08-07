@@ -4,15 +4,20 @@ import QuizCard from "../../components/quizcard/QuizCard";
 import "./userindex.scss";
 import { useParams } from "react-router-dom";
 import LeaderBoard from "../../components/leaderBoard/LeaderBoard";
+import { getLeaderBoard, updateUserScore } from "../../services/userServices";
 
 function UserIndex() {
   const [level, setLevel] = useState("");
   const [boardStatus, setBoardStatus] = useState(false);
   const [animationClass, setAnimationClass] = useState("hide");
   const levels = ["Easy", "Moderate", "Hard"];
-  const [leaderBoardData, setLeaderBoardData] = useState(
-    JSON.parse(localStorage.getItem("leaderBoard")) || []
-  );
+  const userNameParam = useParams();
+  const userName = userNameParam.username
+  const [leaderBoardData, setLeaderBoardData] = useState([]);
+  
+  useEffect(() => {
+    getLeaderBoard().then((data) => setLeaderBoardData(data));
+  }, []);
 
   const handleExit = () => {
     setLevel("");
@@ -35,20 +40,23 @@ function UserIndex() {
   }, [level]);
 
   const leaderBoardFn = (score) => {
-    console.log("Function calling with score:", score);
-    const updatedLeaderBoard = [...leaderBoardData];
-    const userIndex = updatedLeaderBoard.findIndex(
-      (item) => item.name === userName
+    const userIndex = leaderBoardData.findIndex(
+      (item) => item.userName === userName
     );
+
     if (userIndex !== -1) {
-      if (score > updatedLeaderBoard[userIndex].score) {
-        updatedLeaderBoard[userIndex].score = score;
+      if (score > leaderBoardData[userIndex].score) {
+        updateUserScore(userName, score).then(() => {
+          const updatedLeaderBoard = [...leaderBoardData];
+          updatedLeaderBoard[userIndex].score = score;
+          setLeaderBoardData(updatedLeaderBoard);
+        });
       }
     } else {
-      updatedLeaderBoard.push({ name: userName, score: score });
+      updateUserScore(userName, score).then(() => {
+        getLeaderBoard().then((data) => setLeaderBoardData(data));
+      });
     }
-    setLeaderBoardData(updatedLeaderBoard);
-    localStorage.setItem("leaderBoard", JSON.stringify(updatedLeaderBoard));
   };
 
   const toggleLeaderBoard = () => {

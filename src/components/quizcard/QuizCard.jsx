@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { quiz } from "../../utils/dataSet";
+import { fetchQuizData } from "../../services/userServices";
 import "./quizcard.scss";
+import Loader from "../loader/Loader";
 
 function QuizCard({ level, username, leaderBoard, exit }) {
   const formattedLevel = level.toLowerCase();
@@ -10,9 +11,30 @@ function QuizCard({ level, username, leaderBoard, exit }) {
   const [score, setScore] = useState(0);
   const [isDisabled, setDisabled] = useState(false);
   const [isQuizComplete, setIsQuizComplete] = useState(false);
-  const quizData = quiz.levels[formattedLevel];
-  const defaultScore = quizData.perQuestionScore;
+  const [quizData, setQuizData] = useState(null);
   const [btnText, setBtnText] = useState("Exit");
+  const [defaultScore, setDefaultScore] = useState(0);
+
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetchQuizData(formattedLevel);
+
+        const quiz = response.find((quiz) => quiz.level === formattedLevel);
+        if (quiz) {
+          setQuizData(quiz);
+          setDefaultScore(quiz.perQuestionScore);
+        } else {
+          console.error("No quiz found for the level:", formattedLevel);
+        }
+      } catch (error) {
+        console.error("Error fetching the quiz:", error);
+      }
+    };
+
+    fetchData();
+  }, [formattedLevel]);
 
   useEffect(() => {
     setBtnText(currentIndex === 0 ? "Exit" : "Back");
@@ -21,11 +43,12 @@ function QuizCard({ level, username, leaderBoard, exit }) {
   useEffect(() => {
     if (isQuizComplete) {
       leaderBoard(score);
-      console.log("Passing final score to index:", score);
     }
   }, [isQuizComplete, score]);
 
   const handleAnswer = (choice) => {
+    if (!quizData) return;
+
     setSelectedAnswer(choice);
     setDisabled(true);
     const isCorrect = choice === quizData.questions[currentIndex].correctAnswer;
@@ -34,7 +57,7 @@ function QuizCard({ level, username, leaderBoard, exit }) {
     newUserAnswers[currentIndex] = { chosenAnswer: choice };
     setUserAnswers(newUserAnswers);
 
-    if (currentIndex === quizData.totalQuestions - 1) {
+    if (currentIndex === quizData.questions.length - 1) {
       setIsQuizComplete(true);
     } else {
       setTimeout(handleNext, 1000);
@@ -60,67 +83,64 @@ function QuizCard({ level, username, leaderBoard, exit }) {
     }
   };
 
+  if (!quizData) return <Loader />;
   return (
     <div className="quiz-page">
       {isQuizComplete ? (
-        <>
-          <div className="quiz-score">
-            <h2 className="username">Hi {username}</h2>
-            <h2>Quiz Completed</h2>
-            <p>Your Score: {score}</p>
-            <p>Wrong Score: {userAnswers.length * defaultScore - score}</p>
-            <button className="back-btn" onClick={handleExit}>
-              Back Home
-            </button>
-          </div>
-        </>
+        <div className="quiz-score">
+          <h2 className="username">Hi {username}</h2>
+          <h2>Quiz Completed</h2>
+          <p>Your Score: {score}</p>
+          <p>Wrong Score: {userAnswers.length * defaultScore - score}</p>
+          <button className="back-btn" onClick={handleExit}>
+            Back Home
+          </button>
+        </div>
       ) : (
-        quizData && (
-          <div className="quiz-card">
-            <div className="quiz-card-content">
-              <div className="q-no-container">
-                <p className="q-no">
-                  <span className="current-q-no">
-                    {String(currentIndex + 1).padStart(2, 0)}
-                  </span>
-                  / {quizData.totalQuestions}
-                </p>
-              </div>
-              <div className="questions">
-                <p>{quizData.questions[currentIndex].question}</p>
-                <ul>
-                  {quizData.questions[currentIndex].choices.map((choice, i) => (
-                    <li
-                      key={i}
-                      onClick={() => !isDisabled && handleAnswer(choice)}
-                      style={{
-                        background:
-                          selectedAnswer === choice
-                            ? selectedAnswer ===
-                              quizData.questions[currentIndex].correctAnswer
-                              ? "#0BDA51"
-                              : "#FF5733"
-                            : "",
-                        pointerEvents: isDisabled ? "none" : "auto",
-                      }}
-                    >
-                      {choice}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="btn-container">
-                <button onClick={handleBackOrExit}>{btnText}</button>
-                <button
-                  onClick={handleNext}
-                  disabled={currentIndex === quizData.totalQuestions - 1}
-                >
-                  Next
-                </button>
-              </div>
+        <div className="quiz-card">
+          <div className="quiz-card-content">
+            <div className="q-no-container">
+              <p className="q-no">
+                <span className="current-q-no">
+                  {String(currentIndex + 1).padStart(2, "0")}
+                </span>
+                / {quizData.questions.length}
+              </p>
+            </div>
+            <div className="questions">
+              <p>{quizData.questions[currentIndex].question}</p>
+              <ul>
+                {quizData.questions[currentIndex].choices.map((choice, i) => (
+                  <li
+                    key={i}
+                    onClick={() => !isDisabled && handleAnswer(choice)}
+                    style={{
+                      background:
+                        selectedAnswer === choice
+                          ? selectedAnswer ===
+                            quizData.questions[currentIndex].correctAnswer
+                            ? "#0BDA51"
+                            : "#FF5733"
+                          : "",
+                      pointerEvents: isDisabled ? "none" : "auto",
+                    }}
+                  >
+                    {choice}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="btn-container">
+              <button onClick={handleBackOrExit}>{btnText}</button>
+              <button
+                onClick={handleNext}
+                disabled={currentIndex === quizData.questions.length - 1}
+              >
+                Next
+              </button>
             </div>
           </div>
-        )
+        </div>
       )}
     </div>
   );

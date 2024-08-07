@@ -40,20 +40,24 @@ function SignUp() {
     });
   };
 
-  const handleSignUp = async () => {
+  const handleSignUp = () => {
     const validationErrors = validateForm(formData, userData);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
 
-    const response = await UserSignup(formData);
-    if (response.data.authToken) {
-      
-      navigate(`/index/${response.data.authToken}`);
-    } else {
-      setErrors({ general: response.data });
-    }
+    UserSignup(formData)
+      .then((response) => {
+        if (response.data.authToken) {
+          navigate(`/index/${username}`);
+        } else {
+          setErrors({ general: response.data });
+        }
+      })
+      .catch((error) => {
+        setErrors({ general: "An error occured during signup" });
+      });
   };
 
   return (

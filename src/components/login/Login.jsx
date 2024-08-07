@@ -8,17 +8,16 @@ function Login() {
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const handleLogin = async () => {
+ 
+  const handleLogin = () => {
     if (!username || !password) setError("Fill all the fields");
 
-    if (!username) setError("Username is required");
-
-    if (!password) setError("Password is missing");
     else {
-      const response = await UserLogin(username, password);
-      if (response) {
-        navigate(`/index/${response}`);
-      }
+      UserLogin(username, password)
+        .then(navigate(`/index/${username}`))
+        .catch((error) => {
+          setError("An Error occured during login...");
+        });
     }
   };
 
@@ -49,6 +48,8 @@ function Login() {
           setPassword(e.target.value);
         }}
       />
+      <p className="error">{error}</p>
+
       <button className="btn" onClick={() => handleLogin()}>
         Login
       </button>

@@ -7,7 +7,6 @@ const autoRedirect = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
-
     if (token) {
       const DToken = jwtDecode(token);
       const currentTime = Date.now() / 1000;
@@ -15,7 +14,7 @@ const autoRedirect = () => {
         localStorage.removeItem("authToken");
         navigate("/");
       } else {
-        navigate(`/index/${token}`);
+        navigate(`/index`);
       }
     } else {
       navigate(`/`);
