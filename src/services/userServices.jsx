@@ -23,7 +23,6 @@ export const UserSignup = (userData) => {
 };
 
 // API for user login
-
 export const UserLogin = (username, password) => {
   return axios
     .post(`${API_BASE_URL}/user/login`, {
@@ -31,7 +30,7 @@ export const UserLogin = (username, password) => {
       password,
     })
     .then((response) => {
-      const token = response.data.message;
+      const token = response.data.authToken;
       localStorage.setItem("authToken", token);
       return {
         success: true,
@@ -77,7 +76,6 @@ export const getLeaderBoard = () => {
 
 // Update user's score in the database
 export const updateUserScore = (userName, score) => {
-  console.log(userName);
   return axios
     .put(`${API_BASE_URL}/user/updateScore`, { userName, score })
     .then((response) => response.data)
@@ -85,4 +83,3 @@ export const updateUserScore = (userName, score) => {
       console.log("Error updating user score...!", error);
     });
 };
-

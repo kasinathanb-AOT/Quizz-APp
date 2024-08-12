@@ -14,7 +14,7 @@ const autoRedirect = () => {
         localStorage.removeItem("authToken");
         navigate("/");
       } else {
-        navigate(`/index`);
+        navigate(`/index/${token}`);
       }
     } else {
       navigate(`/`);

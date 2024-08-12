@@ -5,6 +5,7 @@ import "./userindex.scss";
 import { useParams } from "react-router-dom";
 import LeaderBoard from "../../components/leaderBoard/LeaderBoard";
 import { getLeaderBoard, updateUserScore } from "../../services/userServices";
+import UserProfile from "../../components/userProfile/UserProfile";
 
 function UserIndex() {
   const [level, setLevel] = useState("");
@@ -12,9 +13,10 @@ function UserIndex() {
   const [animationClass, setAnimationClass] = useState("hide");
   const levels = ["Easy", "Moderate", "Hard"];
   const userNameParam = useParams();
-  const userName = userNameParam.username
+  const userName = userNameParam.username;
   const [leaderBoardData, setLeaderBoardData] = useState([]);
-  
+  const [profile, setProfile] = useState(false);
+
   useEffect(() => {
     getLeaderBoard().then((data) => setLeaderBoardData(data));
   }, []);
@@ -69,45 +71,55 @@ function UserIndex() {
     }
   };
 
+  const toggleProfile = () => {
+    setProfile(!profile);
+  };
+
   return (
     <div className="main">
-      <Navbar />
-      {level ? (
-        <QuizCard
-          level={level}
-          username={userName}
-          leaderBoard={leaderBoardFn}
-          exit={handleExit}
-        />
+      <Navbar onclick={toggleProfile} />
+      {profile ? (
+        <UserProfile />
       ) : (
         <>
-          <div className="quiz-card-container">
-            <h2>Select your level</h2>
-            <ul>
-              {levels.map((item, index) => (
-                <li
-                  className={`quiz-card ${item.toLowerCase()}`}
-                  key={index}
-                  onClick={() => setLevel(item)}
-                >
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-          {boardStatus && (
-            <LeaderBoard
-              leaderBoard={leaderBoardData}
-              userName={userName}
-              animationClass={animationClass}
+          {level ? (
+            <QuizCard
+              level={level}
+              username={userName}
+              leaderBoard={leaderBoardFn}
+              exit={handleExit}
             />
+          ) : (
+            <>
+              <div className="quiz-card-container">
+                <h2>Select your level</h2>
+                <ul>
+                  {levels.map((item, index) => (
+                    <li
+                      className={`quiz-card ${item.toLowerCase()}`}
+                      key={index}
+                      onClick={() => setLevel(item)}
+                    >
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              {boardStatus && (
+                <LeaderBoard
+                  leaderBoard={leaderBoardData}
+                  userName={userName}
+                  animationClass={animationClass}
+                />
+              )}
+            </>
+          )}
+          {!level && (
+            <button className="show-btn" onClick={toggleLeaderBoard}>
+              {boardStatus ? "Hide" : "Show"} Leader Board
+            </button>
           )}
         </>
-      )}
-      {!level && (
-        <button className="show-btn" onClick={toggleLeaderBoard}>
-          {boardStatus ? "Hide" : "Show"} Leader Board
-        </button>
       )}
     </div>
   );

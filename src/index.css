@@ -29,6 +29,10 @@ span {
     margin: 0;
 }
 
+button:hover{
+    cursor: pointer;
+}
+
 .btn {
     background: var(--secondary-color);
     color: var(--text-color);

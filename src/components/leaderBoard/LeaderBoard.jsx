@@ -2,8 +2,6 @@ import React from "react";
 import "./leaderBoard.scss";
 
 const LeaderBoard = ({ leaderBoard, userName, animationClass }) => {
-
-  
   return (
     <div className={`leader-board ${animationClass}`}>
       <div className="heading">
