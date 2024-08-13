@@ -2,7 +2,8 @@ import axios from "axios";
 import { BASE_URL } from "./api";
 
 const API_BASE_URL = BASE_URL;
-const authToken = localStorage.getItem("authToken");
+
+let authToken = localStorage.getItem("authToken");
 
 // API for user signup
 export const UserSignup = async (userData) => {
@@ -30,6 +31,7 @@ export const UserLogin = async (username, password) => {
       userName: username,
       password,
     });
+    authToken = response.data.authToken;
     localStorage.setItem("authToken", authToken);
     return {
       success: true,
