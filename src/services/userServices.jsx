@@ -30,7 +30,6 @@ export const UserLogin = async (username, password) => {
       userName: username,
       password,
     });
-    authToken = response.data.authToken;
     localStorage.setItem("authToken", authToken);
     return {
       success: true,
