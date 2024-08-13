@@ -3,7 +3,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: rgba(79, 170, 132, 0.3);
     backdrop-filter: blur(6px);
     padding: 40px;
     max-width: 400px;
@@ -19,12 +18,12 @@
 
     .signup-header {
         font-size: 2rem;
-        color: #fff;
+        color: var(--text-color);
     }
 
     label {
         font-size: 1rem;
-        color: #fff;
+        color: var(--text-color);
         font-size: 18px;
         align-self: flex-start;
     }
@@ -33,6 +32,4 @@
         width: 90%;
         font-size: 1rem;
     }
-
-
 }

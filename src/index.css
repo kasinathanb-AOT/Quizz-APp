@@ -1,20 +1,36 @@
 :root {
-    --primary-color: #4faa84;
-    --secondary-color: #3c7168;
-    --text-color: #faf9fa;
-    --mid-color: #d3ede8;
-    --max-width: 1310px;
-    --max-btn: 120px;
-    --card-max-width: 600px;
-    --card-max-height: 500px;
-    --custom-cursor: "../../assets/target-curser.svg";
+    /* Light Theme */
+    --primary-color: #C38EB4;
+    --secondary-color: #E1CBD7;
+    --text-color: #232F47;
+    --mid-color: #66A8CF;
+    --background-color: #FAF9FA;
+}
+
+/* Dark Theme */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --primary-color: #26425A;
+        --secondary-color: #66A8CF;
+        --text-color: #E1CBD7;
+        --mid-color: #C38EB4;
+        --background-color: #232F47;
+    }
 }
 
 body {
     font-family: "Poppins", "Arial";
-    margin: 0px;
+    margin: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
 }
 
+body {
+    font-family: "Poppins", "Arial";
+    margin: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
 p,
 h1,
 h2,
@@ -52,7 +68,7 @@ button:hover {
     height: 100%;
     background: var(--mid-color);
     font-size: 24px;
-    color: var(--secondary-color);
+    color: var(--text-color);
     align-items: center;
     display: flex;
     transition: 0.3s ease all;

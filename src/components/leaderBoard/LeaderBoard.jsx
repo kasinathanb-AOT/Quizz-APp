@@ -14,8 +14,8 @@ const LeaderBoard = ({ leaderBoard, userName, animationClass }) => {
               <li
                 key={item._id}
                 style={{
-                  background: userName === item.userName ? "#d3ede8" : "",
-                  color: userName === item.userName ? "#000" : "",
+                  background: userName === item.userName ? "var(--secondary-color)" : "",
+                  color: userName === item.userName ? "var(--text-color)" : "",
                 }}
               >
                 <span className="first">
