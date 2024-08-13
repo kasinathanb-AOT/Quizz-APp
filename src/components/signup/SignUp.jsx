@@ -2,31 +2,17 @@ import React, { useState } from "react";
 import "./signup.scss";
 import { useNavigate } from "react-router-dom";
 import { UserSignup } from "../../services/userServices";
-import { validateForm } from "../../utils/formValidations";
+import BasicLoader from "../basicLoader/basicLoader";
 
 function SignUp() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: "",
   });
-
-  const [errors, setErrors] = useState({});
-
-  const fetchUserData = () => {
-    try {
-      const storedUserData = localStorage.getItem("userData");
-      return Array.isArray(JSON.parse(storedUserData))
-        ? JSON.parse(storedUserData)
-        : [];
-    } catch (e) {
-      console.error("Error parsing userData from local storage:", e);
-      return [];
-    }
-  };
-
-  const userData = fetchUserData();
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,30 +20,24 @@ function SignUp() {
       ...formData,
       [name]: value,
     });
-    setErrors({
-      ...errors,
-      [name]: "",
-    });
+    setError("");
   };
 
-  const handleSignUp = () => {
-    const validationErrors = validateForm(formData, userData);
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
+  const handleSignUp = async () => {
+    setLoading(true);
+    try {
+      const response = await UserSignup(formData);
+      setLoading(false);
+      if (response.data.authToken) {
+        navigate(`/index/${formData.username}`);
+      } else {
+        setError(response.message || "Signup failed");
+        setLoading(false);
+      }
+    } catch (error) {
+      setLoading(false);
+      setError(error.message || "An error occurred during signup");
     }
-
-    UserSignup(formData)
-      .then((response) => {
-        if (response.data.authToken) {
-          navigate(`/index/${username}`);
-        } else {
-          setErrors({ general: response.data });
-        }
-      })
-      .catch((error) => {
-        setErrors({ general: "An error occured during signup" });
-      });
   };
 
   return (
@@ -73,7 +53,6 @@ function SignUp() {
         value={formData.username}
         onChange={handleChange}
       />
-      {errors.username && <p className="error">{errors.username}</p>}
 
       <label>Email</label>
       <input
@@ -84,7 +63,6 @@ function SignUp() {
         value={formData.email}
         onChange={handleChange}
       />
-      {errors.email && <p className="error">{errors.email}</p>}
 
       <label>Password</label>
       <input
@@ -95,10 +73,11 @@ function SignUp() {
         value={formData.password}
         onChange={handleChange}
       />
-      {errors.password && <p className="error">{errors.password}</p>}
+
+      {error && <p className="error">{error}</p>}
 
       <button onClick={handleSignUp} className="btn">
-        Signup
+        {loading ? <BasicLoader /> : "Sign up"}
       </button>
     </div>
   );

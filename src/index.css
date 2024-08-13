@@ -29,7 +29,7 @@ span {
     margin: 0;
 }
 
-button:hover{
+button:hover {
     cursor: pointer;
 }
 
@@ -94,4 +94,26 @@ input:focus {
 
 ::-webkit-scrollbar {
     display: none;
+}
+
+
+/* Basic loader */
+.basicLoader {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid var(--secondary-color);
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    animation: spin 2s linear infinite;
+    margin: auto;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }

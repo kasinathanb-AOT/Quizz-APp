@@ -2,22 +2,29 @@ import React, { useState } from "react";
 import "./login.scss";
 import { useNavigate } from "react-router-dom";
 import { UserLogin } from "../../services/userServices";
+import BasicLoader from "../basicLoader/basicLoader";
 
 function Login() {
   const navigate = useNavigate();
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
- 
-  const handleLogin = () => {
-    if (!username || !password) setError("Fill all the fields");
+  const [loading, setLoading] = useState(false);
 
-    else {
-      UserLogin(username, password)
-        .then(navigate(`/index/${username}`))
-        .catch((error) => {
-          setError("An Error occured during login...");
-        });
+  const handleLogin = async () => {
+    setLoading(true);
+    if (!username || !password) {
+      setError("Fill all the fields");
+      setLoading(false);
+    } else {
+      const result = await UserLogin(username, password);
+      setLoading(false)
+      if (result.success) {
+        navigate(`/index/${username}`);
+      } else {
+        setError(result.message || "An Error occurred during login...");
+        setLoading(false)
+      }
     }
   };
 
@@ -49,9 +56,8 @@ function Login() {
         }}
       />
       <p className="error">{error}</p>
-
-      <button className="btn" onClick={() => handleLogin()}>
-        Login
+      <button className="btn" onClick={handleLogin}>
+        {loading ? <BasicLoader /> : "Login"}
       </button>
     </div>
   );

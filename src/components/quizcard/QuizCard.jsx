@@ -15,7 +15,6 @@ function QuizCard({ level, username, leaderBoard, exit }) {
   const [btnText, setBtnText] = useState("Exit");
   const [defaultScore, setDefaultScore] = useState(0);
 
-  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -83,7 +82,15 @@ function QuizCard({ level, username, leaderBoard, exit }) {
     }
   };
 
-  if (!quizData) return <Loader />;
+  if (!quizData)
+    return (
+      <div className="api-cancel">
+        <Loader />{" "}
+        <button onClick={() => handleExit()} className="btn home-btn">
+          Cancel
+        </button>
+      </div>
+    );
   return (
     <div className="quiz-page">
       {isQuizComplete ? (
